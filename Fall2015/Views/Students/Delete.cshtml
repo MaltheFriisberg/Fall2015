@@ -1,0 +1,21 @@
+﻿@using Fall2015.Models;
+
+@model Student
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+
+    //insert partial view here
+    @Html.Partial("_CreateEditStudent")
+    <input type="submit" value="Delete" class="btn btn-default" id="saveButton" />
+}
+
+
+

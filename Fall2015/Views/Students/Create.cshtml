@@ -1,0 +1,23 @@
+﻿@using Fall2015.Models;
+
+@model Student
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+    @Html.ValidationSummary()
+
+    //insert partial view here
+    @Html.Partial("_CreateEditStudent")
+    <input type="submit" value="Save" class="btn btn-default" id="saveButton"/>
+    <input type="file" name="image" />
+
+}
+
+
