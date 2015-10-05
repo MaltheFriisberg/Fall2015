@@ -11,12 +11,18 @@ namespace Fall2015.Controllers
 {
     public class StudentsController : Controller
     {
-        public StudentsController()
-        {
-            
-        }
         // the repository that querys the DB
-        IStudentsRepository repo = new StudentsRepository();
+        private readonly IStudentsRepository Studentrepo;
+        private readonly IEmailer emailer;
+        StudentsRepository repo = new StudentsRepository();
+        //constructor used for dependency injection
+        /*public StudentsController(IStudentsRepository repo, IEmailer emailer)
+        {
+            this.Studentrepo = repo;
+            this.emailer = emailer;
+
+        }*/
+       
 
         public ActionResult Index()
         {
@@ -64,10 +70,15 @@ namespace Fall2015.Controllers
             //look up a student in the db
             Student student = repo.Find(studentId);
             ViewBag.StudentName = student.Firstname;
-            //Open the Edit view with the chosen student object
-            return View(student);
+            if (ModelState.IsValid)
+            {
+                repo.Delete(student.StudentId);
+                return RedirectToAction("Index");
+            }
+            //Load the index page again, can be skipped?
+            return View("Index", repo.ToList());
         }
-        [HttpPost]
+        /*[HttpPost]
         public ActionResult Delete(Student student)
         {
             //Student student = db.Students.Find(studentId);
@@ -77,7 +88,7 @@ namespace Fall2015.Controllers
                 return RedirectToAction("Index");
             }
             return View(student);
-        }
+        }*/
 
 
 
@@ -106,19 +117,6 @@ namespace Fall2015.Controllers
             
         }
 
-
-
-        public String WannaPlayDad()
-        {
-            return "No!";
-        }
-
-        public ActionResult WannaPlayDad2()
-        {
-            ViewBag.Dad = "Hi there sonny";
-            return View();
-        }
-        
     }
 }
 
