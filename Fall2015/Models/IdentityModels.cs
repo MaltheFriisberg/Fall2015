@@ -27,6 +27,7 @@ namespace Fall2015.Models
 
 
         public ApplicationDbContext()
+            //the "DefaultConnection" and its connection string is declared in the (2nd)Web.config
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
