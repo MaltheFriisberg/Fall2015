@@ -20,7 +20,8 @@ namespace Fall2015.Repositories
         {
             get { return db.Competencies; }
         }
-
+        //from scafolding. Used to Write linq queries(?) paramater = lambda expression..
+        //..to identify which properties in the object you want selected
         public IQueryable<Competency> AllIncluding(params Expression<Func<Competency, object>>[] includeProperties)
         {
             IQueryable<Competency> query = db.Competencies;
