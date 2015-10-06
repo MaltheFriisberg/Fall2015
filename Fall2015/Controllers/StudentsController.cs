@@ -106,19 +106,6 @@ namespace Fall2015.Controllers
             
         }
 
-
-
-        public String WannaPlayDad()
-        {
-            return "No!";
-        }
-
-        public ActionResult WannaPlayDad2()
-        {
-            ViewBag.Dad = "Hi there sonny";
-            return View();
-        }
-        
     }
 }
 

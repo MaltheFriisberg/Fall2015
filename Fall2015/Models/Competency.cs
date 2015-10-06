@@ -12,7 +12,7 @@ namespace Fall2015.Models
         public String name { get; set; }
         //Foreign Key
         public int CompetencyHeaderId { get; set; }
-        //
+        //lazy loading
         public virtual CompetencyHeader CompetencyHeader { get; set; }
     }
 }
