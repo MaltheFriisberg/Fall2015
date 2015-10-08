@@ -14,5 +14,9 @@ namespace Fall2015.Models
         public int CompetencyHeaderId { get; set; }
         //lazy loading
         public virtual CompetencyHeader CompetencyHeader { get; set; }
+        
+        //foreign Key #2
+        public int StudentId { get; set; }
+        public virtual Student student { get; set; }
     }
 }

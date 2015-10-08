@@ -10,7 +10,7 @@ namespace Fall2015.Models
     public class Student
     {
         //[Key]
-        public int StudentId { get; set; }
+       public int StudentId { get; set; }
 
         [Required(ErrorMessage = "Wrong, stupid user. You must have a firstname.")]
         public String Firstname { get; set; }
@@ -25,6 +25,10 @@ namespace Fall2015.Models
         public String MobilePhone { get; set; }
 
         public String ImageFilePath { get; set; }
+
+        //public virtual int CompetencyId { get; set; }
+
+        public ICollection<Competency> Competency { get; set; }
 
         public void SaveOrUpdateImage(HttpPostedFileBase image, String serverPath, String pathToFile)
         {

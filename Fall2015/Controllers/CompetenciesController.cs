@@ -26,7 +26,7 @@ namespace Fall2015.Controllers
         {
             ViewBag.CompetencyHeaderId = new SelectList(headerRepo.All, "CompetencyHeaderId", "Name");
             //TempData.
-            return View();
+            return View(new Competency());
         }
 
         [HttpPost]

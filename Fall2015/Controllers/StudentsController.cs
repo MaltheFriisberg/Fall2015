@@ -15,6 +15,7 @@ namespace Fall2015.Controllers
         private readonly IStudentsRepository Studentrepo;
         private readonly IEmailer emailer;
         StudentsRepository repo = new StudentsRepository();
+        CompetenciesRepository competencyRepo = new CompetenciesRepository();
         //constructor used for dependency injection
         /*public StudentsController(IStudentsRepository repo, IEmailer emailer)
         {
@@ -26,7 +27,7 @@ namespace Fall2015.Controllers
 
         public ActionResult Index()
         {
-
+            ViewBag.CompetencyId = new SelectList(competencyRepo.All, "Competency", "Name");
             return View(repo.ToList());
         }
 
