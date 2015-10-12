@@ -7,7 +7,7 @@ using Fall2015.Helpers;
 
 namespace Fall2015.Models
 {
-    public class Student
+    public class Student : IStudent
     {
         //[Key]
         public int StudentId { get; set; }
@@ -37,7 +37,7 @@ namespace Fall2015.Models
             ImageFilePath = pathToFile + guid.ToString() + ".jpg";
         }
 
-        private void RemoveOldImage(String serverPath)
+        public void RemoveOldImage(String serverPath)
         {
             if (ImageFilePath != null)
             {

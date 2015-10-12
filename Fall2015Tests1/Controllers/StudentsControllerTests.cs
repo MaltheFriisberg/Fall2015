@@ -35,7 +35,15 @@ namespace Fall2015.Controllers.Tests
         [TestMethod()]
         public void EditTest1()
         {
-            Assert.Fail();
+            Mock<IStudentsRepository> repoMock = new Mock<IStudentsRepository>();
+            Mock<IEmailer> emailMock = new Mock<IEmailer>();
+            StudentsController controller = new StudentsController(repoMock.Object, emailMock.Object);
+            Student x = new Student {StudentId = 2};
+            controller.Edit(x.StudentId);
+
+            repoMock.Verify(a => a.InsertOrUpdate(x));
+
+            //Assert.Fail();
         }
 
         [TestMethod()]
@@ -60,15 +68,27 @@ namespace Fall2015.Controllers.Tests
         public void CreateTest1()
         {
             Mock<IStudentsRepository> mockRepo = new Mock<IStudentsRepository>();
-            StudentsController controller = new StudentsController(mockRepo.Object);
+            Mock<IEmailer> emailMock = new Mock<IEmailer>();
+            StudentsController controller = new StudentsController(mockRepo.Object, emailMock.Object);
+            Mock<IStudent> studentMock = new Mock<IStudent>();
+            Student s = new Student
+            {
+                Firstname = "daniel",
+                Lastname = "xx",
+                ImageFilePath = "xy",
+                Email = "hej@sol.dk",
+                MobilePhone = "23232323",
+                StudentId = 2
+            };
 
-            Student s = new Student {Firstname = "daniel", Lastname = "xx"};
-
-            controller.Create(s, image: null);
+            controller.Create(s, null);
+            //studentMock.Verify(a => a.SaveOrUpdateImage());
+           //ock
             //mock is only testing if the method is called on the object
             mockRepo.Verify(a=>a.InsertOrUpdate(s));
             //possibly verify that more methods are called
-            Assert.Fail();
+            mockRepo.Verify(a => a.Save());
+            //Assert.Fail();
         }
 
         [TestMethod()]
