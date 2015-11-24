@@ -41,3 +41,11 @@ textarea {
   background-color: #2b5076;
   color: #eee;
 }
+.Invisible {
+  display: none;
+}
+.glyphicon-plus,
+glyphicon-remove,
+glyphicon-pencil {
+  cursor: pointer;
+}

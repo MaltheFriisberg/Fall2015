@@ -25,6 +25,10 @@ namespace Fall2015.Models
         public String MobilePhone { get; set; }
 
         public String ImageFilePath { get; set; }
+        //for the joined table
+        public virtual ICollection<Competency> Competencies { get; set; }
+        //weak reference to the login table
+        public string ApplicationUserId { get; set; }
 
         public void SaveOrUpdateImage(HttpPostedFileBase image, String serverPath, String pathToFile)
         {

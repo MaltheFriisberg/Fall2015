@@ -12,10 +12,14 @@ namespace Fall2015.Repositories
 {
     public class CompetenciesRepository
 
-        
-    {
-        private ApplicationDbContext db = new ApplicationDbContext();
 
+    {
+        private ApplicationDbContext db;
+
+        public CompetenciesRepository(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
         public IQueryable<Competency> All
         {
             get { return db.Competencies; }
@@ -39,6 +43,7 @@ namespace Fall2015.Repositories
 
         public Competency Find(int competencyId)
         {
+            
             return db.Competencies.Find(competencyId);
         }
 

@@ -24,6 +24,7 @@ namespace Fall2015.Models
         public DbSet<Student> Students { get; set; }
         public DbSet<CompetencyHeader> CompetencyHeaders {get; set; }
         public DbSet<Competency> Competencies { get; set; } 
+        //public DbSet<StudentCompetencies> StudentCompetencies { get; set; }
 
 
         public ApplicationDbContext()

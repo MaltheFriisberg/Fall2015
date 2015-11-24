@@ -11,7 +11,12 @@ namespace Fall2015.Repositories
 {
     class CompetencyHeaderRepo
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        public CompetencyHeaderRepo(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
 
         public IQueryable<CompetencyHeader> All
         {

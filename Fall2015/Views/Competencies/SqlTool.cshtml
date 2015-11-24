@@ -1,0 +1,81 @@
+﻿@using System.Web.Services.Description
+
+@{
+    ViewBag.Title = "SqlTool";
+    <script src="~/Scripts/jquery-2.1.4.js"></script>
+    //<script src="~/Js/jquery-2.1.4.js"></script>
+    //<script src="~/Js/DataFetcher.js"></script>
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Submission ID</th>
+            <th>Form ID</th>
+            <th>IP</th>
+            <th>Name</th>
+            <th>E-mail</th>
+            <th>Message</th>
+        </tr>
+        <tr>
+            <td>123456789</td>
+            <td>12345</td>
+            <td>123.456.789</td>
+            <td>John Johnny</td>
+            <td>johnny@johnysite.com</td>
+            <td>This is the message John sent you</td>
+        </tr>
+    </table>
+    <input type="text" class="form-control" id="SqlField">
+<button type="button" class="btn btn-default" id="ColumnButton">Add Column</button>
+<script type="text/javascript">
+    /**
+ * Created by Mal on 12-11-2015.
+ */
+    $(function () {
+
+            $("#ColumnButton").click(function () {
+                console.log("Click");
+                console.log(this);
+                var queryX = $("#SqlField").val();
+                //var query = (this.parent().children(".SqlField").val());
+                console.log("query "+queryX);
+                var data = {query : queryX};
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SqlTool", "Competencies")',
+                    data : JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        console.log(data);
+                        if (data === queryX) {
+                            alert("sucess");
+                            //console.log($(this).parent().children());
+                            $(this).parent().children(".CompetencyDiv").append(data);
+                        }
+
+                    },
+                    error: function () {
+                        alert("Something bad happened " +data);
+                    }
+                });
+            });
+
+        
+    });
+
+
+</script>
+   
+
+</body>
+</html>
+

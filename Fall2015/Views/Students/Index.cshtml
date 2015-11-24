@@ -1,51 +1,144 @@
-﻿@model IEnumerable<Fall2015.Models.Student>
+﻿@using Fall2015.Models
+@model Fall2015.ViewModels.StudentsIndexViewModel
 
 @{
     ViewBag.Title = "Index";
 }
+
+<script src="~/Scripts/jquery-2.1.4.js"></script>
 
 <h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Firstname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lastname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MobilePhone)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Firstname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lastname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MobilePhone)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { studentId=item.StudentId }) |
-            @Html.ActionLink("Details", "Details", new { studentId=item.StudentId }) |
-            @Html.ActionLink("Delete", "Delete", new { studentId=item.StudentId })
-        </td>
-    </tr>
-}
+<div class="row">
+    <div class="col-xs-12 col-sm-9">
+        <div class="panel panel-default">
 
-</table>
+            <div class="panel-heading">
+                Filter displayed students
+            </div>
+
+            <div>
+                <input type="button" class="btn btn-default" id="btnCompetencies" value="Filter on competencies..."/>
+                <div class="MarginLeft40">
+                    <input type="button" class="btn btn-primary pull-right Invisible" value="Edit Competencies" id="btnEditCompetencies"/>
+
+                    @foreach (var compHeader in Model.Headers)
+                    {
+                        <div class="Invisible FilterCompetencies">
+                            <label class="lblHeader"><input type="checkbox" name="competencyHeader" class="CompetencyHeader MarginRight5" id ="competencyHeader"/>@compHeader.Name</label>
+                            <span class="glyphicon glyphicon-plus Invisible"></span>
+
+                            <div class="outerContainer">
+                                @foreach (var competency in @compHeader.Competencies)
+                                {
+                                    <div class="MarginLeft40 CompetencyDiv">
+
+                                        <label class="CompetencyLabel"><input class="MarginRight5 Competency" type="checkbox" name="Competencies" value="@competency.Name"/>@competency.Name</label>
+                                        <span class="glyphicon glyphicon-pencil Invisible"></span>
+                                        <span class="glyphicon glyphicon-remove Invisible"></span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            @foreach (Student student in Model.Students)
+            {
+                <div class="col-lg-2 col-sm-3 col-xs-4">
+                    <a href="@Url.Action("Edit", "Students", new {StudentId = @student.StudentId})">
+
+                        <img src="../../@student.ImageFilePath" class="profileImage thumbnail img-responsive">
+                    </a>
+                </div>}
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    //parent goes to the upper container, children gets the specific element in the container
+    $(function () { //when document is loaded.
+        $(".glyphicon-plus").click(function() {
+            $(this).parent().children(".outerContainer")
+                .prepend('<input type="text" class="form-control" id = "textInput"/>' +
+                    ' <input type="button" value="save competency" id ="btnSave"/>');
+
+            $("#btnSave").click(function () {
+                console.log(this);
+                var value = $(this).parent().children("#textInput").val();
+                console.log(value);
+                alert(value+" ");
+                $(this).parent().children(".compHeader").append(value);
+            });
+        });
+        $(".glyphicon-delete").click(function() {
+            var competencyToDelete = $("#CompetencyLabel").remove();
+        });
+
+        $(document.body).on("click", "#btnSave", function () {
+            console.log(this);
+            
+            var value = $(this).parent().children("#textInput").val();
+            var compHeaderName = $(".lblHeader").text(); //the selected competencyHEader
+            console.log(value);
+            console.log(compHeaderName);
+            alert(compHeaderName+ " "+ value);
+            
+            //$(this).parent().children(".compHeader").append(value);
+
+            var that = $(this);
+
+            var data = {
+                name: value,
+                competencyHeaderName: compHeaderName
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Create", "Competencies")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    console.log(data);
+                    if (data === 'Ok') {
+                        alert("sucess");
+                        //console.log($(this).parent().children());
+                        $(this).parent().children(".CompetencyDiv").append(data);
+                    }
+                    
+                },
+                error: function() {
+                    alert("Something bad happened");
+                }
+            }); 
+                
+        });
+        
+        $("#btnCompetencies").click(function() {
+            //when user clicks the button with the id, btnCompetencies
+            $(".FilterCompetencies").show("fast");
+            $("#btnEditCompetencies").show();
+        });
+
+        $("#btnEditCompetencies").click(function() {
+            //displays all the icons
+            alert("showing the clyphicons");
+            $(".glyphicon-remove").show();
+            $(".glyphicon-plus").show();
+            $(".glyphicon-pencil").show();
+        });
+
+    });
+
+</script>

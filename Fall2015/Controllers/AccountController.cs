@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Fall2015.Models;
+using Fall2015.Repositories;
+using Fall2015.ViewModels;
 
 namespace Fall2015.Controllers
 {
@@ -17,6 +19,7 @@ namespace Fall2015.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private CompetencyHeaderRepo HeaderRepo = new CompetencyHeaderRepo(new ApplicationDbContext());
 
         public AccountController()
         {
@@ -139,6 +142,11 @@ namespace Fall2015.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            CreateEditStudentViewModel vm = new CreateEditStudentViewModel
+            {
+                Student = new Student(),
+                Headers = HeaderRepo.ToList(),
+            };
             return View();
         }
 
@@ -147,14 +155,19 @@ namespace Fall2015.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, Student student)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+               
+                var user = new ApplicationUser { UserName = model.CreateEditStudent.Student.Email, Email = model.CreateEditStudent.Student.Email  };
+                //insert the user in the DB
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //save student to DB
+                    StudentsRepository studentsRepository = new StudentsRepository(new ApplicationDbContext());
+                    studentsRepository.InsertOrUpdate(student);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

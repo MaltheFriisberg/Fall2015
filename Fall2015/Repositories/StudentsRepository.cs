@@ -24,8 +24,12 @@ namespace Fall2015.Repositories
 
     public class StudentsRepository : IStudentsRepository
     {
-        private ApplicationDbContext db =
-            new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        public StudentsRepository(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
 
         public IQueryable<Student> All
         {
@@ -55,11 +59,13 @@ namespace Fall2015.Repositories
                 db.Students.Add(student);
                 
                 
+                
             }
             else //edit
             {
 
                 //student.SaveImage(image, Server.MapPath("~"), "/ProfileImages/");
+                
                 db.Entry(student).State = EntityState.Modified;
                 
             }

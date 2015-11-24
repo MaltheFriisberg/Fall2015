@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Fall2015.Models;
@@ -10,13 +12,20 @@ namespace Fall2015.Controllers
 {
     public class CompetenciesController : Controller
     {
-        private CompetenciesRepository repo = new CompetenciesRepository();
-        private CompetencyHeaderRepo headerRepo = new CompetencyHeaderRepo();
+        private CompetenciesRepository repo;
+        private CompetencyHeaderRepo headerRepo;
         // GET: CompetenciesController1
-        
+
+        public CompetenciesController()
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+            this.repo = new CompetenciesRepository(context);
+            this.headerRepo = new CompetencyHeaderRepo(context);
+
+        }
+
 
         [HttpGet]
-
         public ActionResult Index()
         {
             return View(repo.ToList());
@@ -29,11 +38,43 @@ namespace Fall2015.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Create(Competency competency)
+        [HttpGet]
+        public ViewResult SqlTool()
         {
+            return View("SqlTool");
+        }
+
+        [HttpPost]
+        public JsonResult SqlTool(string query)
+        {
+            var type = Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(t => t.Name == query);
+            ApplicationDbContext context = new ApplicationDbContext();
+            DbSet contextDbSet;
+            
+            
+            contextDbSet = context.Set(type);
+                
+            
+            return Json(contextDbSet.ToString());
+        }
+
+        [HttpPost]
+        public JsonResult Create(string name, string competencyHeaderName)
+        {
+            //https://msdn.microsoft.com/en-us/data/jj573936.aspx
+            var competencyHeaders = headerRepo.All;
+            int count = competencyHeaders.Count();
+            CompetencyHeader header = competencyHeaders.First(x => x.Name == competencyHeaderName);
+            //var result = competencyHeaders.Where(x => x.Name.Equals(name)).First();
+            
+                //headerRepo.Find(result.CompetencyHeaderId);
+                var competency = new Competency
+                {
+                    Name = name, CompetencyHeader = header, CompetencyHeaderId = header.CompetencyHeaderId
+                };
             repo.InsertOrUpdate(competency);
-            return View("Index");
+
+            return Json(competency.Name);
         }
         [HttpGet]
         public ActionResult Edit()

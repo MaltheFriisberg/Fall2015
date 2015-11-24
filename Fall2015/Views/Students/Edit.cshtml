@@ -1,14 +1,14 @@
 ﻿@using Fall2015.Models;
 
-@model Student
+@model Fall2015.ViewModels.CreateEditStudentViewModel
 
 @{
     ViewBag.Title = "Edit";
 }
-
+@Html.HiddenFor(a => a.Student.StudentId)
 <h2>Edit @ViewBag.StudentName's details</h2>
 
-<img src="@Model.ImageFilePath" alt="Profile image" />
+<img src="@Model.Student.ImageFilePath" alt="Profile image" />
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {

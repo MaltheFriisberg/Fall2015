@@ -10,7 +10,7 @@ namespace Fall2015.Models
 
     {
         public int CompetencyHeaderId { get; set; }
-        public String name { get; set; }
+        public string Name { get; set; }
         // the header will have multiple competencies oneToMany
         public virtual ICollection<Competency> Competencies { get; set; } 
     }
